@@ -1,21 +1,36 @@
-"""One-line office joke for make.fun's "Make the AI Judge Laugh: the Office Joke Open".
+"""Office joke entry for make.fun's "Make the AI Judge Laugh: the Office Joke Open".
 
-Writes the joke to /output/entry.txt (1-200 characters, single line).
-Standard library only; nothing is built or run beyond writing the text.
+Emits one single-line joke (149 characters) to /output/entry.txt.
+The program uses only the Python standard library and performs no
+network access, no file reads and no shelling out -- it just writes text.
 """
 
 import os
 
-JOKE = (
-    "My boss said AI would never replace me. Then he asked me to train the AI, "
-    "document my job for the AI, and attend a meeting about the AI replacing me."
+# The joke, kept as three clauses that are joined at import time. The
+# wording of each clause is fixed; joining them yields the exact entry.
+_CLAUSES = (
+    "My boss said AI would never replace me. ",
+    "Then he asked me to train the AI, document my job for the AI, ",
+    "and attend a meeting about the AI replacing me.",
 )
 
+JOKE = "".join(_CLAUSES)
 
-def main() -> None:
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8") as f:
-        f.write(JOKE)
+ENTRY_PATH = "/output/entry.txt"
+
+
+def write_entry(path, text):
+    """Write *text* to *path*, creating the parent directory if needed."""
+    directory = os.path.dirname(path)
+    if directory:
+        os.makedirs(directory, exist_ok=True)
+    with open(path, "w", encoding="utf-8") as handle:
+        handle.write(text)
+
+
+def main():
+    write_entry(ENTRY_PATH, JOKE)
     print(JOKE)
 
 
